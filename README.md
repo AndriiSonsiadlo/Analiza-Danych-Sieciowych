@@ -1,1 +1,1 @@
-# Analiza-danych-sieciowych
+# Analiza danych sieciowych
