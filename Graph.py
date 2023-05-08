@@ -38,13 +38,16 @@ class Graph:
 
     @staticmethod
     @functools.lru_cache()
-    def get_price(origin, destination, cents_per_km=0.1):
-        """Return the cheapest flight without stops."""
-
+    def get_distance(origin, destination):
         # Haversine distance, in kilometers
         point1 = origin.latitude, origin.longitude,
         point2 = destination.latitude, destination.longitude
         distance = haversine.haversine(point1, point2)
+        return distance
+
+    @staticmethod
+    def get_price(origin, destination, cents_per_km=0.1):
+        distance = Graph.get_distance(origin, destination)
         return distance * cents_per_km
 
     def dijkstra(self, origin, destination):
