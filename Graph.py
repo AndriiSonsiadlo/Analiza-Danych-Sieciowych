@@ -3,11 +3,8 @@ import functools
 
 import haversine
 
-from Heap import Heap
-
-Airport = collections.namedtuple('Airport', 'code name country latitude longitude')
-Flight = collections.namedtuple('Flight', 'origin destination')
-Route = collections.namedtuple('Route', 'price path')
+from Heap import Heap, HeuristicHeap
+from models import Route
 
 
 class Graph:
