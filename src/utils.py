@@ -3,7 +3,7 @@ import csv
 from models import Airport, Flight
 
 
-def get_airports(path='dataset/airports.dat'):
+def get_airports(path='dataset/airports.csv'):
     """Return a generator that yields Airport objects."""
 
     with open(path, 'rt', encoding="utf8") as fd:
@@ -17,7 +17,7 @@ def get_airports(path='dataset/airports.dat'):
             yield Airport(code=code, name=name, country=country, latitude=latitude, longitude=longitude)
 
 
-def get_flights(path='dataset/flights.dat'):
+def get_flights(path='dataset/flights.csv'):
     """Return a generator that yields direct Flight objects."""
 
     with open(path, 'rt', encoding="utf8") as fd:

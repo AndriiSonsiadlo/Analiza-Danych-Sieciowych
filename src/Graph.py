@@ -62,7 +62,6 @@ class Graph:
         visited.add(origin)
 
         while routes:
-
             # Find the nearest yet-to-visit airport
             price, path = routes.pop()
             airport = path[-1]
@@ -97,7 +96,6 @@ class Graph:
         visited.add(origin)
 
         while routes:
-
             # Find the nearest yet-to-visit airport
             price, path = routes.pop()
             airport = path[-1]
