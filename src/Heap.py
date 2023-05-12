@@ -39,7 +39,7 @@ class HeuristicHeap:
     def push(self, value: Route, destination: Airport):
         """Push the value item onto the heap."""
         heuristic = self.get_distance(value.path[-1], destination)
-        priority = value.price + heuristic
+        priority = value.distance + heuristic
         heapq.heappush(self._values, (priority, value))
 
     def pop(self):

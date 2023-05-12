@@ -5,6 +5,7 @@ import haversine
 
 from Heap import Heap, HeuristicHeap
 from models import Route
+from src.utils import timeit
 
 
 class Graph:
@@ -46,74 +47,82 @@ class Graph:
         return distance
 
     @staticmethod
-    def get_price(origin, destination, cents_per_km=0.1):
-        distance = Graph.get_distance(origin, destination)
+    def get_price(distance, cents_per_km=0.1):
         return distance * cents_per_km
 
+    @timeit
     def dijkstra(self, origin, destination):
         """Use Dijkstra's algorithm to find the cheapest path."""
 
+        print(f"{' Dijkstra algorithm ':-^40}")
+
         routes = Heap()
         for neighbor in self.neighbors(origin):
-            price = self.get_price(origin, neighbor)
-            routes.push(Route(price=price, path=[origin, neighbor]))
+            distance = self.get_distance(origin, neighbor)
+            routes.push(Route(distance=distance, path=[origin, neighbor]))
 
         visited = set()
         visited.add(origin)
 
+        number_of_checks = 0
         while routes:
+            number_of_checks += 1
             # Find the nearest yet-to-visit airport
-            price, path = routes.pop()
+            distance, path = routes.pop()
             airport = path[-1]
             if airport in visited:
                 continue
 
             # We have arrived! Wo-hoo!
             if airport is destination:
-                return price, path
+                return distance, path, number_of_checks
 
             # Tentative distances to all the unvisited neighbors
             for neighbor in self.neighbors(airport):
                 if neighbor not in visited:
-                    # Total spent so far plus the price of getting there
-                    new_price = price + self.get_price(airport, neighbor)
+                    # Total spent so far plus the distance of getting there
+                    new_distance = distance + self.get_distance(airport, neighbor)
                     new_path = path + [neighbor]
-                    routes.push(Route(new_price, new_path))
+                    routes.push(Route(new_distance, new_path))
 
             visited.add(airport)
+        return float('infinity'), None, 0
 
-        return float('infinity'), None
-
+    @timeit
     def a_star(self, origin, destination):
-        """Use Dijkstra's algorithm to find the cheapest path."""
+        """Use A* algorithm to find the cheapest path."""
+
+        print(f"{' A* algorithm ':-^40}")
 
         routes = HeuristicHeap()
         for neighbor in self.neighbors(origin):
-            price = self.get_price(origin, neighbor)
-            routes.push(Route(price=price, path=[origin, neighbor]), destination=destination)
+            distance = self.get_distance(origin, neighbor)
+            routes.push(Route(distance=distance, path=[origin, neighbor]), destination=destination)
 
         visited = set()
         visited.add(origin)
 
+        checks_number = 0
         while routes:
+            checks_number += 1
+
             # Find the nearest yet-to-visit airport
-            price, path = routes.pop()
+            distance, path = routes.pop()
             airport = path[-1]
             if airport in visited:
                 continue
 
             # We have arrived! Wo-hoo!
             if airport is destination:
-                return price, path
+                return distance, path, checks_number
 
             # Tentative distances to all the unvisited neighbors
             for neighbor in self.neighbors(airport):
                 if neighbor not in visited:
                     # Total spent so far plus the price of getting there
-                    new_price = price + self.get_price(airport, neighbor)
+                    new_distance = distance + self.get_distance(airport, neighbor)
                     new_path = path + [neighbor]
-                    routes.push(Route(new_price, new_path), destination=destination)
-
+                    routes.push(Route(new_distance, new_path), destination=destination)
             visited.add(airport)
 
-        return float('infinity'), None
+        return float('infinity'), None, 0

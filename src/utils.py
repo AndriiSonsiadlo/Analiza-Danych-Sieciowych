@@ -1,4 +1,5 @@
 import csv
+import time
 
 from models import Airport, Flight
 
@@ -28,3 +29,16 @@ def get_flights(path='dataset/flights.csv'):
             nstops = int(row[7])  # Number of stops; zero for direct.
             if not nstops:
                 yield Flight(origin=origin, destination=destination)
+
+
+def timeit(func):
+    """Decorator to time a function."""
+
+    def wrapper(*args, **kwargs):
+        start = time.perf_counter()
+        result = func(*args, **kwargs)
+        end = time.perf_counter() - start
+        print(f"Time elapsed: {end:.6f} seconds")
+        return result
+
+    return wrapper
