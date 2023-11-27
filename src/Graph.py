@@ -23,16 +23,22 @@ class Graph:
         yield from self._neighbors[node]
 
     @classmethod
-    def load(cls, flights, airports):
+    def load(cls, flights, airports, n: int = 1_000_000):
         """Return a populated Graph object with real airports and routes."""
 
         world = cls()
-        for flight in flights:
+
+        flights
+
+        for i, flight in enumerate(flights):
+
             try:
                 origin = airports[flight.origin]
                 destination = airports[flight.destination]
                 world.connect(origin, destination)
-            # Ignore flights to or from an unknown airport
+                if i == n:
+                    break
+                # Ignore flights to or from an unknown airport
             except KeyError:
                 continue
         return world

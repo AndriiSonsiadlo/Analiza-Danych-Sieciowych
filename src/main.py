@@ -1,3 +1,5 @@
+import time
+
 from Graph import Graph
 from utils import get_flights, get_airports
 
@@ -15,16 +17,17 @@ def display_result(distance, path, number_of_checks):
 
 
 if __name__ == "__main__":
-    world = Graph.load(FLIGHTS, AIRPORTS)
+    world = Graph.load(FLIGHTS, AIRPORTS, n=100_000)
 
     print(f"{'Path from Papua New Guinea to Angola':^150}")
     papua_new_guinea = AIRPORTS['IAA']
     angola = AIRPORTS['BSB']
+    time.sleep(5)
     display_result(*world.dijkstra(papua_new_guinea, angola))
     display_result(*world.a_star(papua_new_guinea, angola))
 
-    # print(f"{'Path from Valencia to Portland':^150}")
-    # valencia = AIRPORTS['VLC']
-    # portland = AIRPORTS['PDX']
-    # display_result(*world.dijkstra(valencia, portland))
-    # display_result(*world.a_star(valencia, portland))
+    print(f"{'Path from Valencia to Portland':^150}")
+    valencia = AIRPORTS['VLC']
+    portland = AIRPORTS['PDX']
+    display_result(*world.dijkstra(valencia, portland))
+    display_result(*world.a_star(valencia, portland))
